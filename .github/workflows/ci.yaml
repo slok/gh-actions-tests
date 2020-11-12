@@ -10,6 +10,7 @@ jobs:
       EVENT: ${{ toJson(github) }}
       USER_ID: ${{ github.event.sender.id }}
     steps:
+      - run: echo "VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV # Sets version env var.
       - run: echo "all-1a"
       - run: echo ${EVENT}
       - run: echo ${USER_ID}
@@ -20,6 +21,7 @@ jobs:
     env:
       EVENT: ${{ toJson(github) }}
     steps:
+      - run: echo "VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV # Sets version env var.
       - run: echo "all-1b"
 
   all-2:
@@ -29,6 +31,7 @@ jobs:
     env:
       EVENT: ${{ toJson(github) }}
     steps:
+      - run: echo "VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV # Sets version env var.
       - run: echo "all-2"
 
   on-master:
@@ -40,6 +43,7 @@ jobs:
     env:
       EVENT: ${{ toJson(github) }}
     steps:
+      - run: echo "VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV # Sets version env var.
       - run: echo "on-master"
 
 
@@ -52,4 +56,5 @@ jobs:
     env:
       EVENT: ${{ toJson(github) }}
     steps:
+      - run: echo "VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV # Sets version env var.
       - run: echo "on-tags"
