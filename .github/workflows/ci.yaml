@@ -1,0 +1,45 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  all-1a:
+    name: All 1a
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "all-1a"
+  all-1b:
+    name: All 1b
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "all-1b"
+
+  all-2:
+    name: All 2
+    needs: [all-1a, all-1b]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "all-2"
+
+  on-master:
+    # Only on master.
+    if: startsWith(github.ref, 'refs/heads/master')
+    env:
+      VERSION: ${GITHUB_SHA}
+    needs: [all-2]
+    name: On master
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "${VERSION}"
+
+
+  on-tags:
+    # Only on tags.
+    if: startsWith(github.ref, 'refs/tags/')
+    env:
+      VERSION: ${{ github.event.release.tag_name }}
+    needs: [all-2]
+    name: On tags
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "${VERSION}"
