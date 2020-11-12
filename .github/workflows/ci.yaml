@@ -6,11 +6,19 @@ jobs:
   all-1a:
     name: All 1a
     runs-on: ubuntu-latest
+    env:
+      EVENT: ${{ toJson(github) }}
+      USER_ID: ${{ github.event.sender.id }}
     steps:
       - run: echo "all-1a"
+      - run: echo ${EVENT}
+      - run: echo ${USER_ID}
+
   all-1b:
     name: All 1b
     runs-on: ubuntu-latest
+    env:
+      EVENT: ${{ toJson(github) }}
     steps:
       - run: echo "all-1b"
 
@@ -18,28 +26,30 @@ jobs:
     name: All 2
     needs: [all-1a, all-1b]
     runs-on: ubuntu-latest
+    env:
+      EVENT: ${{ toJson(github) }}
     steps:
       - run: echo "all-2"
 
   on-master:
     # Only on master.
     if: startsWith(github.ref, 'refs/heads/master')
-    env:
-      VERSION: ${GITHUB_SHA}
     needs: [all-2]
     name: On master
     runs-on: ubuntu-latest
+    env:
+      EVENT: ${{ toJson(github) }}
     steps:
-      - run: echo "${VERSION}"
+      - run: echo "on-master"
 
 
   on-tags:
     # Only on tags.
     if: startsWith(github.ref, 'refs/tags/')
-    env:
-      VERSION: ${{ github.event.release.tag_name }}
     needs: [all-2]
     name: On tags
     runs-on: ubuntu-latest
+    env:
+      EVENT: ${{ toJson(github) }}
     steps:
-      - run: echo "${VERSION}"
+      - run: echo "on-tags"
